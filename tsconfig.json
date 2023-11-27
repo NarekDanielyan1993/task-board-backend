@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "module": "NodeNext",
+        "rootDir": "./",
+        "moduleResolution": "NodeNext",
+        "resolveJsonModule": true,
+        "outDir": "./build  ",
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "noImplicitAny": true,
+        "skipLibCheck": true,
+        "sourceMap": true /* Skip type checking all .d.ts files. */,
+        "noUnusedLocals": true,
+        // "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
+        "baseUrl": "src",
+        "paths": {
+            "types/*": ["types/*"],
+            "utils/*": ["utils/*"],
+            "controller/*": ["controller/*"],
+            "service/*": ["service/*"],
+            "model/*": ["model/*"],
+            "repository/*": ["repository/*"],
+            "constant/*": ["src/constant/*"],
+            "route/*": ["route/*"]
+        }
+    }
+}
