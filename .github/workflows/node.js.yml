@@ -28,4 +28,4 @@ jobs:
     - run: npm run build --if-present
     - run: |
        touch .env
-       ${{secrets.TASK_BOARD_SECRET}}
+       echo "${{secrets.TASK_BOARD_SECRET}}" > .env
