@@ -12,17 +12,12 @@ const taskRepository = new TaskRepository(TaskModel);
 const taskService = new TaskService(taskRepository);
 const attachmentRepository = new AttachmentRepository(AttachmentModel);
 const attachmentService = new AttachmentService(attachmentRepository);
-// const stageRepository = new StageRepository(StageModel);
-// const stageService = new StageService(stageRepository);
-const taskController = new TaskController(
-    taskService,
-    attachmentService,
-    // stageService,
-);
+const taskController = new TaskController(taskService, attachmentService);
 
 const taskRoutes: Router = express.Router();
 
 taskRoutes.get('/tasks/search', isAuth, taskController.searchTasks);
+taskRoutes.get('/tasks', taskController.getTasks);
 taskRoutes.post('/task', isAuth, taskController.createTask);
 taskRoutes.post('/task/subtask', isAuth, taskController.createSubTask);
 taskRoutes.put('/task', isAuth, taskController.updateTask);

@@ -1,8 +1,6 @@
 import { Model, QueryOptions, QuerySelector, Types } from 'mongoose';
 import {
     ITaskCreate,
-    ITaskCreateResponse,
-    ITaskDeleteResponse,
     ITaskModel,
     ITaskRepository,
     ITaskResponse,
@@ -17,7 +15,50 @@ class TaskRepository implements ITaskRepository {
         this.model = model;
     }
 
-    async create(taskData: ITaskCreate): Promise<ITaskCreateResponse> {
+    async findAll(): Promise<ITaskResponse[]> {
+        try {
+            const tasks = await this.model.aggregate([
+                {
+                    $lookup: {
+                        from: 'comments',
+                        localField: '_id',
+                        foreignField: 'taskId',
+                        as: 'comments',
+                        pipeline: [
+                            {
+                                $match: {
+                                    parentId: null,
+                                },
+                            },
+                        ],
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'tasks',
+                        localField: '_id',
+                        foreignField: 'parentId',
+                        as: 'subTasks',
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'attachments',
+                        localField: '_id',
+                        foreignField: 'taskId',
+                        as: 'attachments',
+                    },
+                },
+            ]);
+            console.log(tasks);
+            return tasks;
+        } catch (error) {
+            console.log(error);
+            throw new Error('Failed to retrieve tasks.');
+        }
+    }
+
+    async create(taskData: ITaskCreate): Promise<ITaskResponse> {
         try {
             const lastInsertedTask = await this.model
                 .findOne({})
@@ -164,22 +205,6 @@ class TaskRepository implements ITaskRepository {
         }
     }
 
-    // async findAll() {
-    //     try {
-    //         return await TaskModel.find();
-    //     } catch (error) {
-    //         throw new Error('Failed to retrieve tasks');
-    //     }
-    // }
-
-    // async findById(taskId) {
-    //     try {
-    //         return await TaskModel.findById(taskId);
-    //     } catch (error) {
-    //         throw new Error('Failed to find task by ID');
-    //     }
-    // }
-
     async updateById(
         taskId: Types.ObjectId,
         taskData: ITaskUpdate,
@@ -197,12 +222,10 @@ class TaskRepository implements ITaskRepository {
         }
     }
 
-    async delete(taskId: string): Promise<ITaskDeleteResponse> {
+    async delete(taskId: string): Promise<ITaskResponse | null> {
         console.log('taskIdRepo', taskId);
         try {
-            return (await this.model.findByIdAndDelete(
-                taskId,
-            )) as ITaskDeleteResponse;
+            return await this.model.findByIdAndDelete(taskId);
         } catch (error) {
             throw new Error('Failed to delete task');
         }

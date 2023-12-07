@@ -1,5 +1,5 @@
-import { QueryOptions, RootQuerySelector, Schema, Types } from 'mongoose';
-import { ITaskResponse, UpdateOperation } from '..';
+import { QueryOptions, RootQuerySelector, Types } from 'mongoose';
+import { UpdateOperation } from '..';
 
 export interface IStageModel extends Document {
     name: string;
@@ -23,10 +23,9 @@ export interface IStageCreateResponse extends IStageModel {
     id: Types.ObjectId;
 }
 
-export interface IStageResponse {
-    id: Schema.Types.ObjectId;
-    _id?: Schema.Types.ObjectId;
-    tasks: ITaskResponse[];
+export interface IStageResponse extends IStageModel {
+    id?: Types.ObjectId;
+    _id: Types.ObjectId;
 }
 
 // SERVICE

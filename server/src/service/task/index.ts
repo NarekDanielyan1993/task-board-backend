@@ -1,8 +1,6 @@
 import { QueryOptions, QuerySelector, Types } from 'mongoose';
 import {
     ITaskCreate,
-    ITaskCreateResponse,
-    ITaskDeleteResponse,
     ITaskModel,
     ITaskRepository,
     ITaskResponse,
@@ -18,7 +16,7 @@ export class TaskService implements ITaskService {
         this.taskRepository = taskRepository;
     }
 
-    async createTask(taskData: ITaskCreate): Promise<ITaskCreateResponse> {
+    async createTask(taskData: ITaskCreate): Promise<ITaskResponse> {
         return await this.taskRepository.create(taskData);
     }
 
@@ -26,13 +24,9 @@ export class TaskService implements ITaskService {
         return await this.taskRepository.searchBySummary(searchData);
     }
 
-    // async getTasks() {
-    //     return this.taskRepository.findAll();
-    // }
-
-    // async getTaskById(taskId) {
-    //     return this.taskRepository.findById(taskId);
-    // }
+    async getTasks() {
+        return await this.taskRepository.findAll();
+    }
 
     async updateById(
         taskId: Types.ObjectId,
@@ -42,13 +36,11 @@ export class TaskService implements ITaskService {
         return this.taskRepository.updateById(taskId, taskData, options);
     }
 
-    async deleteTask(taskId: string): Promise<ITaskDeleteResponse> {
+    async deleteTask(taskId: string): Promise<ITaskResponse | null> {
         return await this.taskRepository.delete(taskId);
     }
 
-    async deleteTasks(
-        data: QuerySelector<ITaskModel>,
-    ): Promise<ITaskDeleteResponse> {
+    async deleteTasks(data: QuerySelector<ITaskModel>): Promise<ITaskResponse> {
         return await this.taskRepository.deleteMany(data);
     }
 }

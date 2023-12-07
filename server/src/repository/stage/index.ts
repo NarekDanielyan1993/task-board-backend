@@ -1,9 +1,4 @@
-import mongoose, {
-    Model,
-    QueryOptions,
-    RootQuerySelector,
-    Types,
-} from 'mongoose';
+import { Model, QueryOptions, RootQuerySelector, Types } from 'mongoose';
 import { UpdateOperation } from 'types/database';
 import {
     IStageCreate,
@@ -34,152 +29,164 @@ class StageRepository implements IStageRepository {
         }
     }
 
-    async getAll(boardId: string): Promise<IStageResponse[]> {
+    public async getAll(boardId: string): Promise<IStageResponse[]> {
         try {
-            const stages: IStageResponse[] =
-                await this.model.aggregate<IStageResponse>([
-                    {
-                        $match: {
-                            boardId: new mongoose.Types.ObjectId(boardId),
-                        },
-                    },
-                    {
-                        $lookup: {
-                            from: 'tasks',
-                            localField: '_id',
-                            foreignField: 'stageId',
-                            as: 'tasks',
-                            pipeline: [
-                                {
-                                    $unwind: {
-                                        path: '$tasks',
-                                        preserveNullAndEmptyArrays: true,
-                                    },
-                                },
-                                {
-                                    $lookup: {
-                                        from: 'tasks',
-                                        localField: '_id',
-                                        foreignField: 'parentId',
-                                        as: 'tasks.subTasks',
-                                    },
-                                },
-                                {
-                                    $lookup: {
-                                        from: 'comments',
-                                        localField: '_id',
-                                        foreignField: 'taskId',
-                                        as: 'tasks.comments',
-                                        pipeline: [
-                                            {
-                                                $match: {
-                                                    parentId: null,
-                                                },
-                                            },
-                                        ],
-                                    },
-                                },
-                                {
-                                    $lookup: {
-                                        from: 'attachments',
-                                        localField: '_id',
-                                        foreignField: 'taskId',
-                                        as: 'tasks.attachments',
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                    {
-                        $sort: {
-                            listPosition: 1,
-                        },
-                    },
-                    {
-                        $project: {
-                            _id: 0,
-                            id: '$_id',
-                            name: 1,
-                            color: 1,
-                            listPosition: 1,
-                            tasks: {
-                                $cond: {
-                                    if: { $ne: [{ $size: '$tasks' }, 0] },
-                                    then: {
-                                        $map: {
-                                            input: '$tasks',
-                                            as: 'task',
-                                            in: {
-                                                id: '$$task._id',
-                                                summary: '$$task.summary',
-                                                due_date: '$$task.due_date',
-                                                description:
-                                                    '$$task.description',
-                                                taskNumber: '$$task.taskNumber',
-                                                priorityId: '$$task.priorityId',
-                                                stageId: '$$task.stageId',
-                                                createdAt: '$$task.createdAt',
-                                                updatedAt: '$$task.updatedAt',
-                                                attachments: {
-                                                    $map: {
-                                                        input: '$$task.tasks.attachments',
-                                                        as: 'attachment',
-                                                        in: {
-                                                            id: '$$attachment._id',
-                                                            name: '$$attachment.name',
-                                                            url: '$$attachment.url',
-                                                            isUploaded:
-                                                                '$$attachment.isUploaded',
-                                                        },
-                                                    },
-                                                },
-                                                subTasks: {
-                                                    $map: {
-                                                        input: '$$task.tasks.subTasks',
-                                                        as: 'task',
-                                                        in: {
-                                                            id: '$$task._id',
-                                                            summary:
-                                                                '$$task.summary',
-                                                            stageId:
-                                                                '$$task.stageId',
-                                                            parentId:
-                                                                '$$task.parentId',
-                                                        },
-                                                    },
-                                                },
-                                                comments: {
-                                                    $map: {
-                                                        input: '$$task.tasks.comments',
-                                                        as: 'comment',
-                                                        in: {
-                                                            id: '$$comment._id',
-                                                            createdAt:
-                                                                '$$comment.createdAt',
-                                                            text: '$$comment.text',
-                                                            replyCount:
-                                                                '$$comment.replyCount',
-                                                            parentId:
-                                                                '$$comment.parentId',
-                                                            taskId: '$$comment.taskId',
-                                                        },
-                                                    },
-                                                },
-                                            },
-                                        },
-                                    },
-                                    else: [],
-                                },
-                            },
-                        },
-                    },
-                ]);
+            const stages = await this.model.find({ boardId }).sort({
+                listPosition: 1,
+            });
             return stages;
         } catch (error) {
             console.log(error);
-            throw new Error('An error occurred while retrieving the stages.');
+            throw new Error('Failed to retrieve stages');
         }
     }
+
+    // async getAll(boardId: string): Promise<IStageResponse[]> {
+    //     try {
+    //         const stages: IStageResponse[] =
+    //             await this.model.aggregate<IStageResponse>([
+    //                 {
+    //                     $match: {
+    //                         boardId: new mongoose.Types.ObjectId(boardId),
+    //                     },
+    //                 },
+    //                 {
+    //                     $lookup: {
+    //                         from: 'tasks',
+    //                         localField: '_id',
+    //                         foreignField: 'stageId',
+    //                         as: 'tasks',
+    //                         pipeline: [
+    //                             {
+    //                                 $unwind: {
+    //                                     path: '$tasks',
+    //                                     preserveNullAndEmptyArrays: true,
+    //                                 },
+    //                             },
+    //                             {
+    //                                 $lookup: {
+    //                                     from: 'tasks',
+    //                                     localField: '_id',
+    //                                     foreignField: 'parentId',
+    //                                     as: 'tasks.subTasks',
+    //                                 },
+    //                             },
+    //                             {
+    //                                 $lookup: {
+    //                                     from: 'comments',
+    //                                     localField: '_id',
+    //                                     foreignField: 'taskId',
+    //                                     as: 'tasks.comments',
+    //                                     pipeline: [
+    //                                         {
+    //                                             $match: {
+    //                                                 parentId: null,
+    //                                             },
+    //                                         },
+    //                                     ],
+    //                                 },
+    //                             },
+    //                             {
+    //                                 $lookup: {
+    //                                     from: 'attachments',
+    //                                     localField: '_id',
+    //                                     foreignField: 'taskId',
+    //                                     as: 'tasks.attachments',
+    //                                 },
+    //                             },
+    //                         ],
+    //                     },
+    //                 },
+    //                 {
+    //                     $sort: {
+    //                         listPosition: 1,
+    //                     },
+    //                 },
+    //                 {
+    //                     $project: {
+    //                         _id: 0,
+    //                         id: '$_id',
+    //                         name: 1,
+    //                         color: 1,
+    //                         listPosition: 1,
+    //                         tasks: {
+    //                             $cond: {
+    //                                 if: { $ne: [{ $size: '$tasks' }, 0] },
+    //                                 then: {
+    //                                     $map: {
+    //                                         input: '$tasks',
+    //                                         as: 'task',
+    //                                         in: {
+    //                                             id: '$$task._id',
+    //                                             summary: '$$task.summary',
+    //                                             due_date: '$$task.due_date',
+    //                                             description:
+    //                                                 '$$task.description',
+    //                                             taskNumber: '$$task.taskNumber',
+    //                                             priorityId: '$$task.priorityId',
+    //                                             stageId: '$$task.stageId',
+    //                                             createdAt: '$$task.createdAt',
+    //                                             updatedAt: '$$task.updatedAt',
+    //                                             attachments: {
+    //                                                 $map: {
+    //                                                     input: '$$task.tasks.attachments',
+    //                                                     as: 'attachment',
+    //                                                     in: {
+    //                                                         id: '$$attachment._id',
+    //                                                         name: '$$attachment.name',
+    //                                                         url: '$$attachment.url',
+    //                                                         isUploaded:
+    //                                                             '$$attachment.isUploaded',
+    //                                                     },
+    //                                                 },
+    //                                             },
+    //                                             subTasks: {
+    //                                                 $map: {
+    //                                                     input: '$$task.tasks.subTasks',
+    //                                                     as: 'task',
+    //                                                     in: {
+    //                                                         id: '$$task._id',
+    //                                                         summary:
+    //                                                             '$$task.summary',
+    //                                                         stageId:
+    //                                                             '$$task.stageId',
+    //                                                         parentId:
+    //                                                             '$$task.parentId',
+    //                                                     },
+    //                                                 },
+    //                                             },
+    //                                             comments: {
+    //                                                 $map: {
+    //                                                     input: '$$task.tasks.comments',
+    //                                                     as: 'comment',
+    //                                                     in: {
+    //                                                         id: '$$comment._id',
+    //                                                         createdAt:
+    //                                                             '$$comment.createdAt',
+    //                                                         text: '$$comment.text',
+    //                                                         replyCount:
+    //                                                             '$$comment.replyCount',
+    //                                                         parentId:
+    //                                                             '$$comment.parentId',
+    //                                                         taskId: '$$comment.taskId',
+    //                                                     },
+    //                                                 },
+    //                                             },
+    //                                         },
+    //                                     },
+    //                                 },
+    //                                 else: [],
+    //                             },
+    //                         },
+    //                     },
+    //                 },
+    //             ]);
+    //         return stages;
+    //     } catch (error) {
+    //         console.log(error);
+    //         throw new Error('An error occurred while retrieving the stages.');
+    //     }
+    // }
 
     async updateById(
         id: Types.ObjectId,
