@@ -100,6 +100,7 @@ export default class BoardController {
         res: Response,
         next: NextFunction,
     ) => {
+        console.log(4545);
         try {
             const { id } = req.params;
             const { name } = req.body;
