@@ -1,4 +1,4 @@
-import { DEFAULT_PRIORITIES } from 'constant';
+import { DEFAULT_PRIORITIES } from 'constant/common';
 import { NextFunction, Request, Response } from 'express';
 import {
     IBoardResponse,

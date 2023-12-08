@@ -1,5 +1,5 @@
 import compression from 'compression';
-import { corsOptions } from 'constant';
+import { corsOptions } from 'constant/middleware';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { Express, Router } from 'express';

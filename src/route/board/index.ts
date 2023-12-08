@@ -1,5 +1,5 @@
 // routes/boardRoutes.ts
-import { BOARD_API } from 'constant';
+import { BOARD_API } from 'constant/api';
 import BoardController from 'controller/board';
 import express, { Router } from 'express';
 import BoardModel from 'model/board';

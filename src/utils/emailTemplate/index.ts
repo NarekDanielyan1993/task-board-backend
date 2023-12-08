@@ -1,6 +1,6 @@
-import { EMAIL_VERIFICATION_API, RESET_PASSWORD_URL } from 'constant';
-
 // EMAIL VERIFICATION
+
+import { EMAIL_VERIFICATION_API, RESET_PASSWORD_URL } from 'constant/api';
 
 export const generateVerificationEmailLink = (token: string) =>
     `${EMAIL_VERIFICATION_API}?token=${token}`;

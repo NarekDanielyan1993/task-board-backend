@@ -1,4 +1,5 @@
-import { BASE_API, SESSION_PROVIDERS, USER_API } from 'constant';
+import { BASE_API, USER_API } from 'constant/api';
+import { SESSION_PROVIDERS } from 'constant/auth';
 import AccountModel from 'model/account';
 import passport from 'passport';
 import GoogleStrategy, {

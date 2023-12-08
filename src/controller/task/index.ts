@@ -16,16 +16,13 @@ import { isExist } from 'utils/helper';
 class TaskController {
     private taskService: ITaskService;
     private attachmentService: IAttachmentService;
-    // private stageService: IStageService;
 
     constructor(
         taskService: ITaskService,
         attachmentService: IAttachmentService,
-        // stageService: IStageService,
     ) {
         this.taskService = taskService;
         this.attachmentService = attachmentService;
-        // this.stageService = stageService;
     }
 
     public searchTasks = async (req: Request, res: Response) => {
@@ -41,19 +38,15 @@ class TaskController {
         }
     };
 
-    // private getTaskById = async (req: Request, res: Response) => {
-    //     const taskId = req.params.taskId;
-    //     try {
-    //         const task = await TaskService.getTaskById(taskId);
-    //         if (task) {
-    //             res.json(task);
-    //         } else {
-    //             res.status(404).json({ error: 'Task not found' });
-    //         }
-    //     } catch (error) {
-    //         res.status(500).json({ error: 'Failed to find task by ID' });
-    //     }
-    // }
+    public getTasks = async (req: Request, res: Response) => {
+        try {
+            const tasks = await this.taskService.getTasks();
+            res.status(200).json(tasks);
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    };
 
     createTask = async (req: Request, res: Response, next: NextFunction) => {
         try {

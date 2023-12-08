@@ -1,5 +1,5 @@
 // routes/boardRoutes.ts
-import { PRIORITY_API } from 'constant';
+import { PRIORITY_API } from 'constant/api';
 import PriorityController from 'controller/priority';
 import express, { Router } from 'express';
 import PriorityModel from 'model/priority';

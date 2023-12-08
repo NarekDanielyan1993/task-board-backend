@@ -3,6 +3,7 @@ import { CorsOptions } from 'cors';
 export const allowedOrigins = [
     'http://localhost:9000',
     'http://localhost:5000',
+    'http://localhost:3000',
 ];
 
 export const corsOptions: CorsOptions = {

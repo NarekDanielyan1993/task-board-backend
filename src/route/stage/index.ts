@@ -1,5 +1,5 @@
 // routes/boardRoutes.ts
-import { STAGE_API } from 'constant';
+import { STAGE_API } from 'constant/api';
 import StageController from 'controller/stage';
 import express, { Router } from 'express';
 import StateModel from 'model/stage';

@@ -1,4 +1,4 @@
-import { EMAIL_VERIFICATION_TEMPLATE_PARAMETERS } from 'constant';
+import { EMAIL_VERIFICATION_TEMPLATE_PARAMETERS } from 'constant/common';
 import Mailgen from 'mailgen';
 import nodemailer from 'nodemailer';
 import { IEmailService } from 'types/email';

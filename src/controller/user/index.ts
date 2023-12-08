@@ -1,11 +1,11 @@
 /* eslint-disable max-lines */
+import { SIGN_UP_COMPLETION_ROUTE } from 'constant/api';
 import {
     EMAIL_VERIFICATION_TOKEN_EXPIRATION_DATE,
     EXPIRES_IN_1_DAY,
     JWT_EXPIRES_IN_1_DAY,
     JWT_EXPIRES_IN_5_MINUTES,
-    SIGN_UP_COMPLETION_ROUTE,
-} from 'constant';
+} from 'constant/auth';
 import { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import VerificationModel from 'model/verificationToken';

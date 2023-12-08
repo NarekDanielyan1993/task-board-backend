@@ -1,4 +1,4 @@
-import { BASE_API } from 'constant';
+import { BASE_API } from 'constant/api';
 import express from 'express';
 import boardRoutes from './board';
 import commentRoutes from './comment';

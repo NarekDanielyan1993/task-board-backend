@@ -58,34 +58,28 @@ export interface ITaskResponse extends ITaskModel {
     createdAt?: Date;
 }
 
-export interface ITaskCreateResponse extends ITaskModel {
-    _id: Types.ObjectId;
-}
-
-export interface ITaskDeleteResponse extends ITaskModel {
-    _id: Types.ObjectId;
-}
-
 export interface ITaskRepository {
-    create(taskData: ITaskCreate): Promise<ITaskCreateResponse>;
+    create(taskData: ITaskCreate): Promise<ITaskResponse>;
+    findAll(): Promise<ITaskResponse[]>;
     searchBySummary(searchData: ITaskSearch): Promise<any>;
     updateById(
         taskId: Types.ObjectId,
         taskData: ITaskUpdate,
         options?: QueryOptions,
     ): Promise<ITaskResponse | null>;
-    delete(taskId: string): Promise<ITaskDeleteResponse>;
+    delete(taskId: string): Promise<ITaskResponse | null>;
     deleteMany(data: RootQuerySelector<ITaskModel>): Promise<any>;
 }
 
 export interface ITaskService {
-    createTask(taskData: ITaskCreate): Promise<ITaskCreateResponse>;
+    getTasks(): Promise<ITaskResponse[]>;
+    createTask(taskData: ITaskCreate): Promise<ITaskResponse>;
     searchBySummary(searchData: ITaskSearch): Promise<any>;
     updateById(
         taskId: Types.ObjectId,
         taskData: ITaskUpdate,
         options?: QueryOptions,
     ): Promise<ITaskResponse | null>;
-    deleteTask(taskId: string): Promise<ITaskDeleteResponse>;
+    deleteTask(taskId: string): Promise<ITaskResponse | null>;
     deleteTasks(data: RootQuerySelector<ITaskModel>): Promise<any>;
 }

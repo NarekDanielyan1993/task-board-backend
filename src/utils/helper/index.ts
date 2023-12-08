@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import { EXPIRES_IN_1_DAY, JWT_EXPIRES_IN_10_MINUTES } from 'constant';
+import { EXPIRES_IN_1_DAY, JWT_EXPIRES_IN_10_MINUTES } from 'constant/auth';
 import Cookies, { Cookie } from 'cookies';
 import { Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
