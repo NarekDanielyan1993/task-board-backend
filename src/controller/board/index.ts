@@ -101,6 +101,7 @@ export default class BoardController {
         next: NextFunction,
     ) => {
         try {
+            console.log(4545);
             const { id } = req.params;
             const { name } = req.body;
             const updatedBoard = await this.boardService.updateBoardById(
