@@ -71,7 +71,6 @@ class CommentController {
             };
             const createdComment: ICommentResponse =
                 await this.commentService.createComment(newCommentData);
-            console.log('createdComment', createdComment);
             res.status(201).json(createdComment);
         } catch (error) {
             next(error);
@@ -107,6 +106,7 @@ class CommentController {
         next: NextFunction,
     ) => {
         const commentId = req.body.id;
+        console.log(commentId);
         try {
             const deletedComment = await this.commentService.deleteComment({
                 id: commentId,

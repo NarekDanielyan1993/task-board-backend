@@ -29,6 +29,7 @@ jobs:
         touch .env
         echo "${{secrets.TASK_BOARD_SECRET}}" > .env
     - run: npm run build
-    - run: pm2 restart backend
-    - run: sudo service nginx restart
+    - run: |
+        pm2 restart backend
+        sudo service nginx restart 
       
