@@ -12,36 +12,11 @@ import {
 import { isExist } from 'utils/helper';
 
 class CommentController {
-    // private taskService: ITaskService;
     private commentService: ICommentService;
 
     constructor(commentService: ICommentService) {
-        // this.taskService = taskService;
         this.commentService = commentService;
     }
-
-    // private getAllTasks = async (req: Request, res: Response) => {
-    //     try {
-    //         const tasks = await TaskService.getAllTasks();
-    //         res.json(tasks);
-    //     } catch (error) {
-    //         res.status(500).json({ error: 'Failed to retrieve tasks' });
-    //     }
-    // }
-
-    // private getTaskById = async (req: Request, res: Response) => {
-    //     const taskId = req.params.taskId;
-    //     try {
-    //         const task = await TaskService.getTaskById(taskId);
-    //         if (task) {
-    //             res.json(task);
-    //         } else {
-    //             res.status(404).json({ error: 'Task not found' });
-    //         }
-    //     } catch (error) {
-    //         res.status(500).json({ error: 'Failed to find task by ID' });
-    //     }
-    // }
 
     getSubComments = async (
         req: Request,
