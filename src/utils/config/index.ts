@@ -9,8 +9,7 @@ class Config {
         if (typeof value === 'string') {
             return value;
         }
-        return '';
-        // throw new Error(`Environment variable "${key}" is not a string.`);
+        throw new Error(`Environment variable "${key}" is not a string.`);
     }
 
     public static transformMongooseResultingData(mongoose: Mongoose) {
