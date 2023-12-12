@@ -67,13 +67,11 @@ class CommentRepository implements ICommentRepository {
         return childCommentsWithReplyCount;
     }
 
-    async delete(
-        commentData: ICommentDelete,
-    ): Promise<ICommentResponse | null> {
+    async delete(commentData: ICommentDelete): Promise<any> {
         try {
-            return (await this.model.findOneAndDelete({
+            return await this.model.findOneAndDelete({
                 _id: commentData.id,
-            })) as ICommentResponse | null;
+            });
         } catch (error) {
             throw new Error('Failed to delete task');
         }

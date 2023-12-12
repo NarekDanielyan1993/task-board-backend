@@ -54,7 +54,7 @@ export interface ICommentRepository {
     create(commentData: ICommentCreate): Promise<ICommentResponse>;
     getSubComments(id: string): Promise<any>;
     update(commentData: ICommentEdit): Promise<ICommentResponse | null>;
-    delete(commentData: ICommentDelete): Promise<ICommentResponse | null>;
+    delete(commentData: ICommentDelete): Promise<any>;
 }
 
 export interface ICommentService {

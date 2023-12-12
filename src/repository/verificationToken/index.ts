@@ -38,8 +38,7 @@ class VerificationTokenRepository implements IVerificationTokenRepository {
 
     public deleteOne = async (
         tokenData: RootQuerySelector<IVerificationTokenModel>,
-    ): Promise<IVerificationTokenResponse | null> =>
-        await this.model.findOneAndDelete(tokenData);
+    ): Promise<any> => await this.model.findOneAndDelete(tokenData);
 }
 
 export default VerificationTokenRepository;

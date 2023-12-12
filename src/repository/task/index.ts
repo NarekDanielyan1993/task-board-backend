@@ -211,7 +211,6 @@ class TaskRepository implements ITaskRepository {
         options: QueryOptions,
     ): Promise<ITaskResponse | null> {
         try {
-            console.log(taskData);
             return await this.model.findByIdAndUpdate(taskId, taskData, {
                 new: true,
                 ...options,
@@ -222,17 +221,17 @@ class TaskRepository implements ITaskRepository {
         }
     }
 
-    async delete(taskId: string): Promise<ITaskResponse | null> {
-        console.log('taskIdRepo', taskId);
+    async delete(taskId: string): Promise<any> {
         try {
-            return await this.model.findByIdAndDelete(taskId);
+            const deletedTask = await this.model.findByIdAndDelete(taskId);
+            console.log(deletedTask);
+            return deletedTask;
         } catch (error) {
             throw new Error('Failed to delete task');
         }
     }
 
     async deleteMany(data: QuerySelector<ITaskModel>): Promise<any> {
-        console.log('taskIdRepo', data);
         try {
             const deletedTasks = await this.model.find(data);
             await this.model.deleteMany(data);

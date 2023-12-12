@@ -67,7 +67,7 @@ export interface ITaskRepository {
         taskData: ITaskUpdate,
         options?: QueryOptions,
     ): Promise<ITaskResponse | null>;
-    delete(taskId: string): Promise<ITaskResponse | null>;
+    delete(taskId: string): Promise<any>;
     deleteMany(data: RootQuerySelector<ITaskModel>): Promise<any>;
 }
 

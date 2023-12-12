@@ -41,6 +41,5 @@ export interface IVerificationTokenRepository {
     ): Promise<IVerificationTokenResponse | null>;
     deleteOne(
         tokenData: RootQuerySelector<IVerificationTokenModel>,
-    ): Promise<IVerificationTokenResponse | null>;
-    // updateById(id: string, name: string): Promise<IBoardResponse | null>;
+    ): Promise<any>;
 }

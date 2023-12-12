@@ -296,8 +296,6 @@ export default class UserController {
             });
 
             setCookie(req, res, 'isLoggedIn', 'true', {
-                secure: false,
-                sameSite: false,
                 httpOnly: false,
             });
 
