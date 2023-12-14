@@ -1,3 +1,4 @@
+import { InternalServerError } from 'lib/error';
 import { Model, QueryOptions, RootQuerySelector, Types } from 'mongoose';
 import { UpdateOperation } from 'types/database';
 import {
@@ -17,7 +18,6 @@ class StageRepository implements IStageRepository {
     }
 
     async create(stages: IStageCreate[]): Promise<IStageCreateResponse[]> {
-        console.log('stages', stages);
         try {
             const newStage = (await this.model.create(
                 stages,
@@ -25,7 +25,9 @@ class StageRepository implements IStageRepository {
             return newStage;
         } catch (error) {
             console.log(error);
-            throw new Error('An error occurred while creating the stage.');
+            throw new InternalServerError(
+                'An error occurred while creating the stage.',
+            );
         }
     }
 
@@ -37,156 +39,9 @@ class StageRepository implements IStageRepository {
             return stages;
         } catch (error) {
             console.log(error);
-            throw new Error('Failed to retrieve stages');
+            throw new InternalServerError('Failed to retrieve stages');
         }
     }
-
-    // async getAll(boardId: string): Promise<IStageResponse[]> {
-    //     try {
-    //         const stages: IStageResponse[] =
-    //             await this.model.aggregate<IStageResponse>([
-    //                 {
-    //                     $match: {
-    //                         boardId: new mongoose.Types.ObjectId(boardId),
-    //                     },
-    //                 },
-    //                 {
-    //                     $lookup: {
-    //                         from: 'tasks',
-    //                         localField: '_id',
-    //                         foreignField: 'stageId',
-    //                         as: 'tasks',
-    //                         pipeline: [
-    //                             {
-    //                                 $unwind: {
-    //                                     path: '$tasks',
-    //                                     preserveNullAndEmptyArrays: true,
-    //                                 },
-    //                             },
-    //                             {
-    //                                 $lookup: {
-    //                                     from: 'tasks',
-    //                                     localField: '_id',
-    //                                     foreignField: 'parentId',
-    //                                     as: 'tasks.subTasks',
-    //                                 },
-    //                             },
-    //                             {
-    //                                 $lookup: {
-    //                                     from: 'comments',
-    //                                     localField: '_id',
-    //                                     foreignField: 'taskId',
-    //                                     as: 'tasks.comments',
-    //                                     pipeline: [
-    //                                         {
-    //                                             $match: {
-    //                                                 parentId: null,
-    //                                             },
-    //                                         },
-    //                                     ],
-    //                                 },
-    //                             },
-    //                             {
-    //                                 $lookup: {
-    //                                     from: 'attachments',
-    //                                     localField: '_id',
-    //                                     foreignField: 'taskId',
-    //                                     as: 'tasks.attachments',
-    //                                 },
-    //                             },
-    //                         ],
-    //                     },
-    //                 },
-    //                 {
-    //                     $sort: {
-    //                         listPosition: 1,
-    //                     },
-    //                 },
-    //                 {
-    //                     $project: {
-    //                         _id: 0,
-    //                         id: '$_id',
-    //                         name: 1,
-    //                         color: 1,
-    //                         listPosition: 1,
-    //                         tasks: {
-    //                             $cond: {
-    //                                 if: { $ne: [{ $size: '$tasks' }, 0] },
-    //                                 then: {
-    //                                     $map: {
-    //                                         input: '$tasks',
-    //                                         as: 'task',
-    //                                         in: {
-    //                                             id: '$$task._id',
-    //                                             summary: '$$task.summary',
-    //                                             due_date: '$$task.due_date',
-    //                                             description:
-    //                                                 '$$task.description',
-    //                                             taskNumber: '$$task.taskNumber',
-    //                                             priorityId: '$$task.priorityId',
-    //                                             stageId: '$$task.stageId',
-    //                                             createdAt: '$$task.createdAt',
-    //                                             updatedAt: '$$task.updatedAt',
-    //                                             attachments: {
-    //                                                 $map: {
-    //                                                     input: '$$task.tasks.attachments',
-    //                                                     as: 'attachment',
-    //                                                     in: {
-    //                                                         id: '$$attachment._id',
-    //                                                         name: '$$attachment.name',
-    //                                                         url: '$$attachment.url',
-    //                                                         isUploaded:
-    //                                                             '$$attachment.isUploaded',
-    //                                                     },
-    //                                                 },
-    //                                             },
-    //                                             subTasks: {
-    //                                                 $map: {
-    //                                                     input: '$$task.tasks.subTasks',
-    //                                                     as: 'task',
-    //                                                     in: {
-    //                                                         id: '$$task._id',
-    //                                                         summary:
-    //                                                             '$$task.summary',
-    //                                                         stageId:
-    //                                                             '$$task.stageId',
-    //                                                         parentId:
-    //                                                             '$$task.parentId',
-    //                                                     },
-    //                                                 },
-    //                                             },
-    //                                             comments: {
-    //                                                 $map: {
-    //                                                     input: '$$task.tasks.comments',
-    //                                                     as: 'comment',
-    //                                                     in: {
-    //                                                         id: '$$comment._id',
-    //                                                         createdAt:
-    //                                                             '$$comment.createdAt',
-    //                                                         text: '$$comment.text',
-    //                                                         replyCount:
-    //                                                             '$$comment.replyCount',
-    //                                                         parentId:
-    //                                                             '$$comment.parentId',
-    //                                                         taskId: '$$comment.taskId',
-    //                                                     },
-    //                                                 },
-    //                                             },
-    //                                         },
-    //                                     },
-    //                                 },
-    //                                 else: [],
-    //                             },
-    //                         },
-    //                     },
-    //                 },
-    //             ]);
-    //         return stages;
-    //     } catch (error) {
-    //         console.log(error);
-    //         throw new Error('An error occurred while retrieving the stages.');
-    //     }
-    // }
 
     async updateById(
         id: Types.ObjectId,
@@ -205,7 +60,9 @@ class StageRepository implements IStageRepository {
             return updatedStages;
         } catch (error) {
             console.log('updateing stage error', error);
-            throw new Error('An error occurred while creating the state.');
+            throw new InternalServerError(
+                'An error occurred while creating the state.',
+            );
         }
     }
 
@@ -215,7 +72,9 @@ class StageRepository implements IStageRepository {
             await this.model.deleteMany(data);
             return deletedStages;
         } catch (error) {
-            throw new Error('An error occurred while creating the state.');
+            throw new InternalServerError(
+                'An error occurred while creating the state.',
+            );
         }
     }
 
@@ -224,7 +83,9 @@ class StageRepository implements IStageRepository {
             const deletedStage = await this.model.findOneAndDelete(data);
             return deletedStage;
         } catch (error) {
-            throw new Error('An error occurred while creating the state.');
+            throw new InternalServerError(
+                'An error occurred while creating the state.',
+            );
         }
     }
 
@@ -235,7 +96,9 @@ class StageRepository implements IStageRepository {
             );
             return bulkWriteResult;
         } catch (error) {
-            throw new Error('An error occurred while creating the state.');
+            throw new InternalServerError(
+                'An error occurred while creating the state.',
+            );
         }
     }
 
@@ -246,7 +109,9 @@ class StageRepository implements IStageRepository {
             });
             return deletedStages;
         } catch (error) {
-            throw new Error('An error occurred while creating the state.');
+            throw new InternalServerError(
+                'An error occurred while creating the state.',
+            );
         }
     }
 }

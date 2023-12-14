@@ -1,3 +1,4 @@
+import { InternalServerError } from 'lib/error';
 import mongoose, { Model } from 'mongoose';
 import {
     ICreatePriority,
@@ -23,7 +24,9 @@ class PriorityRepository implements IPriorityRepository {
             return newPriority;
         } catch (error) {
             console.log(error);
-            throw new Error('An error occurred while creating the priority.');
+            throw new InternalServerError(
+                'An error occurred while creating the priority.',
+            );
         }
     }
 
@@ -37,7 +40,9 @@ class PriorityRepository implements IPriorityRepository {
             return newPriorities;
         } catch (error) {
             console.log(error);
-            throw new Error('An error occurred while creating the priority.');
+            throw new InternalServerError(
+                'An error occurred while creating the priority.',
+            );
         }
     }
 
@@ -50,7 +55,9 @@ class PriorityRepository implements IPriorityRepository {
                 .select('-createdAt -updatedAt -boardId');
             return priorities;
         } catch (error) {
-            throw new Error('An error occurred while creating the priority.');
+            throw new InternalServerError(
+                'An error occurred while creating the priority.',
+            );
         }
     }
 

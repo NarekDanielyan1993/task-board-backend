@@ -1,3 +1,4 @@
+import { InternalServerError, NotFound } from 'lib/error';
 import { Model } from 'mongoose';
 import {
     IBoardCreate,
@@ -17,7 +18,9 @@ class BoardRepository implements IBoardRepository {
         try {
             return (await this.model.create(board)) as IBoardResponse;
         } catch (error) {
-            throw new Error('An error occurred while creating the board.');
+            throw new InternalServerError(
+                'An error occurred while creating the board.',
+            );
         }
     }
 
@@ -26,7 +29,9 @@ class BoardRepository implements IBoardRepository {
             const boards = (await this.model.find()) as IBoardResponse[];
             return boards;
         } catch (error) {
-            throw new Error('An error occurred while fetching boards.');
+            throw new InternalServerError(
+                'An error occurred while fetching boards.',
+            );
         }
     }
 
@@ -38,7 +43,9 @@ class BoardRepository implements IBoardRepository {
             return board;
         } catch (error) {
             console.log('get board error: ', error);
-            throw new Error('An error occurred while fetching the board.');
+            throw new InternalServerError(
+                'An error occurred while fetching the board.',
+            );
         }
     }
 
@@ -50,11 +57,13 @@ class BoardRepository implements IBoardRepository {
                 { new: true },
             )) as IBoardResponse;
             if (!updatedBoard) {
-                throw new Error('Board not found.');
+                throw new NotFound('Board not found.');
             }
             return updatedBoard;
         } catch (error) {
-            throw new Error('An error occurred while updating the board.');
+            throw new InternalServerError(
+                'An error occurred while updating the board.',
+            );
         }
     }
 
@@ -64,11 +73,13 @@ class BoardRepository implements IBoardRepository {
                 id,
             )) as IBoardResponse;
             if (!deletedBoard) {
-                throw new Error('Board not found.');
+                throw new NotFound('Board not found.');
             }
             return deletedBoard;
         } catch (error) {
-            throw new Error('An error occurred while deleting the board.');
+            throw new InternalServerError(
+                'An error occurred while deleting the board.',
+            );
         }
     }
 }

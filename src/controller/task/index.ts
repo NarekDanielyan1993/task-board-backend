@@ -25,7 +25,11 @@ class TaskController {
         this.attachmentService = attachmentService;
     }
 
-    public searchTasks = async (req: Request, res: Response) => {
+    public searchTasks = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ) => {
         const { search } = req.query as ITaskSearchQueryData;
         try {
             const tasks = await this.taskService.searchBySummary({
@@ -34,17 +38,21 @@ class TaskController {
             res.status(200).json(tasks);
         } catch (error) {
             console.log(error);
-            throw error;
+            next(error);
         }
     };
 
-    public getTasks = async (req: Request, res: Response) => {
+    public getTasks = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ) => {
         try {
             const tasks = await this.taskService.getTasks();
             res.status(200).json(tasks);
         } catch (error) {
             console.log(error);
-            throw error;
+            next(error);
         }
     };
 
@@ -118,7 +126,11 @@ class TaskController {
         }
     };
 
-    public updateTask = async (req: Request, res: Response) => {
+    public updateTask = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ) => {
         const taskId = req.query.taskId as string;
         const taskData: ITaskUpdateQueryData = req.body;
         try {
@@ -176,7 +188,7 @@ class TaskController {
             };
             res.status(200).json(resData);
         } catch (error) {
-            res.status(500).json({ error: 'Failed to update task' });
+            next(error);
         }
     };
 

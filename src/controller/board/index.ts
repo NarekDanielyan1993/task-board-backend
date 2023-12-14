@@ -71,17 +71,6 @@ export default class BoardController {
                     name,
                 });
 
-            // const defaultStages: IStageCreate[] = DEFAULT_STAGES.map(
-            //     (stage) => ({
-            //         name: stage.name,
-            //         boardId: savedBoard.id,
-            //         listPosition: stage.position,
-
-            //     }),
-            // );
-
-            // await this.stageService.createStage(defaultStages);
-
             const defaultPriorities: ICreatePriority[] = DEFAULT_PRIORITIES.map(
                 (priority) => ({
                     name: priority.name,

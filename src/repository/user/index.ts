@@ -1,3 +1,4 @@
+import { InternalServerError, NotFound } from 'lib/error';
 import { FilterQuery, Model, RootQuerySelector, UpdateQuery } from 'mongoose';
 import IUserModel, { IUserRepository, IUserResponse } from 'types/user';
 
@@ -14,7 +15,9 @@ class UserRepository implements IUserRepository {
         try {
             return (await this.model.create(queryData)) as IUserResponse;
         } catch (error) {
-            throw new Error('An error occurred while creating the User.');
+            throw new InternalServerError(
+                'An error occurred while creating the User.',
+            );
         }
     }
 
@@ -24,7 +27,9 @@ class UserRepository implements IUserRepository {
         try {
             return (await this.model.findOne(userData)) as IUserResponse;
         } catch (error) {
-            throw new Error('An error occurred while finding the User.');
+            throw new InternalServerError(
+                'An error occurred while finding the User.',
+            );
         }
     }
 
@@ -34,31 +39,11 @@ class UserRepository implements IUserRepository {
         try {
             return (await this.model.findOne(userData)) as IUserResponse;
         } catch (error) {
-            throw new Error('An error occurred while finding the User.');
+            throw new InternalServerError(
+                'An error occurred while finding the User.',
+            );
         }
     }
-
-    // async findOneOrCreate(
-    //     id: string,
-    //     userData: UpdateQuery<IUserModel>,
-    // ): Promise<IUserResponse | null> {
-    //     try {
-    //         const updatedUser = (await this.model.findOneAndUpdate(
-    //             filter,
-    //             userData,
-    //             {
-    //                 new: true,
-    //             },
-    //         )) as IUserResponse;
-
-    //         if (!updatedUser) {
-    //             throw new Error('User not found.');
-    //         }
-    //         return updatedUser;
-    //     } catch (error) {
-    //         throw new Error('An error occurred while updating the board.');
-    //     }
-    // }
 
     async updateOne(
         filter: FilterQuery<IUserModel>,
@@ -74,11 +59,13 @@ class UserRepository implements IUserRepository {
             )) as IUserResponse;
 
             if (!updatedUser) {
-                throw new Error('User not found.');
+                throw new NotFound('User not found.');
             }
             return updatedUser;
         } catch (error) {
-            throw new Error('An error occurred while updating the board.');
+            throw new InternalServerError(
+                'An error occurred while updating the board.',
+            );
         }
     }
 

@@ -1,3 +1,4 @@
+import { InternalServerError } from 'lib/error';
 import { Model, Types } from 'mongoose';
 import {
     ICommentCreate,
@@ -33,7 +34,7 @@ class CommentRepository implements ICommentRepository {
             return createdComment;
         } catch (error) {
             console.log('Error accrued while creating task: ', error);
-            throw new Error('Failed to create task');
+            throw new InternalServerError('Failed to create task');
         }
     }
 
@@ -55,7 +56,7 @@ class CommentRepository implements ICommentRepository {
             return updatedComment;
         } catch (error) {
             console.log('Error accrued while creating task: ', error);
-            throw new Error('Failed to create task');
+            throw new InternalServerError('Failed to create task');
         }
     }
 
@@ -73,7 +74,7 @@ class CommentRepository implements ICommentRepository {
                 _id: commentData.id,
             });
         } catch (error) {
-            throw new Error('Failed to delete task');
+            throw new InternalServerError('Failed to delete task');
         }
     }
 }

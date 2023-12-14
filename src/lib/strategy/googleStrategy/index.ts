@@ -29,11 +29,10 @@ export default passport.use(
         profile: Profile,
         cb: VerifiedCallback,
     ) {
-        const accountService = new AccountService(
-            new AccountRepository(AccountModel),
-        );
-
         try {
+            const accountService = new AccountService(
+                new AccountRepository(AccountModel),
+            );
             const account = await accountService.findAccountOrCreate(
                 profile.id,
                 {

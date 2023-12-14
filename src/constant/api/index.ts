@@ -47,8 +47,3 @@ export const STAGE_API = {
     CREATE: '/stage',
     DELETE: '/stage',
 };
-
-export const ENV_VARIABLES = {
-    DATABASE_URL: Config.getEnv('DATABASE_URL'),
-    DATABASE_PORT: Number(Config.getEnv('DATABASE_PORT')),
-};

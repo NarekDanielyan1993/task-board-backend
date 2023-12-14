@@ -1,3 +1,4 @@
+import { InternalServerError } from 'lib/error';
 import { Model, QueryOptions, QuerySelector, Types } from 'mongoose';
 import {
     ITaskCreate,
@@ -54,14 +55,14 @@ class TaskRepository implements ITaskRepository {
             return tasks;
         } catch (error) {
             console.log(error);
-            throw new Error('Failed to retrieve tasks.');
+            throw new InternalServerError('Failed to retrieve tasks.');
         }
     }
 
     async create(taskData: ITaskCreate): Promise<ITaskResponse> {
         try {
             const lastInsertedTask = await this.model
-                .findOne({})
+                .findOne()
                 .sort({ taskNumber: -1 })
                 .limit(1);
             const createdTask = await this.model.create({
@@ -73,7 +74,7 @@ class TaskRepository implements ITaskRepository {
             return createdTask;
         } catch (error) {
             console.log('Error accrued while creating task: ', error);
-            throw new Error('Failed to create task');
+            throw new InternalServerError('Failed to create task');
         }
     }
 
@@ -116,92 +117,12 @@ class TaskRepository implements ITaskRepository {
                         as: 'attachments',
                     },
                 },
-                {
-                    $group: {
-                        _id: '$stageId',
-                        tasks: { $push: '$$ROOT' },
-                    },
-                },
-                {
-                    $project: {
-                        stageId: '$_id',
-                        _id: 0,
-                        tasks: {
-                            $cond: {
-                                if: { $ne: [{ $size: '$tasks' }, 0] },
-                                then: {
-                                    $map: {
-                                        input: '$tasks',
-                                        as: 'task',
-                                        in: {
-                                            id: '$$task._id',
-                                            summary: '$$task.summary',
-                                            due_date: '$$task.due_date',
-                                            description: '$$task.description',
-                                            taskNumber: '$$task.taskNumber',
-                                            priorityId: '$$task.priorityId',
-                                            stageId: '$$task.stageId',
-                                            createdAt: '$$task.createdAt',
-                                            updatedAt: '$$task.updatedAt',
-                                            attachments: {
-                                                $map: {
-                                                    input: '$$task.attachments',
-                                                    as: 'attachment',
-                                                    in: {
-                                                        id: '$$attachment._id',
-                                                        name: '$$attachment.name',
-                                                        url: '$$attachment.url',
-                                                        isUploaded:
-                                                            '$$attachment.isUploaded',
-                                                    },
-                                                },
-                                            },
-                                            subTasks: {
-                                                $map: {
-                                                    input: '$$task.subTasks',
-                                                    as: 'task',
-                                                    in: {
-                                                        id: '$$task._id',
-                                                        summary:
-                                                            '$$task.summary',
-                                                        stageId:
-                                                            '$$task.stageId',
-                                                        parentId:
-                                                            '$$task.parentId',
-                                                    },
-                                                },
-                                            },
-                                            comments: {
-                                                $map: {
-                                                    input: '$$task.comments',
-                                                    as: 'comment',
-                                                    in: {
-                                                        id: '$$comment._id',
-                                                        createdAt:
-                                                            '$$comment.createdAt',
-                                                        text: '$$comment.text',
-                                                        replyCount:
-                                                            '$$comment.replyCount',
-                                                        parentId:
-                                                            '$$comment.parentId',
-                                                        taskId: '$$comment.taskId',
-                                                    },
-                                                },
-                                            },
-                                        },
-                                    },
-                                },
-                                else: [],
-                            },
-                        },
-                    },
-                },
             ]);
             console.log(tasks);
             return tasks;
         } catch (error) {
             console.log('Error accrued while creating task: ', error);
-            throw new Error('Failed to create task');
+            throw new InternalServerError('Failed to create task');
         }
     }
 
@@ -217,7 +138,7 @@ class TaskRepository implements ITaskRepository {
             });
         } catch (error) {
             console.log('task update failed', error);
-            throw new Error('Failed to update task');
+            throw new InternalServerError('Failed to update task');
         }
     }
 
@@ -227,7 +148,7 @@ class TaskRepository implements ITaskRepository {
             console.log(deletedTask);
             return deletedTask;
         } catch (error) {
-            throw new Error('Failed to delete task');
+            throw new InternalServerError('Failed to delete task');
         }
     }
 
@@ -237,7 +158,7 @@ class TaskRepository implements ITaskRepository {
             await this.model.deleteMany(data);
             return deletedTasks;
         } catch (error) {
-            throw new Error('Failed to delete tasks');
+            throw new InternalServerError('Failed to delete tasks');
         }
     }
 }
