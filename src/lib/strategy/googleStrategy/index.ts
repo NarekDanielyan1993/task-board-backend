@@ -30,6 +30,7 @@ export default passport.use(
         cb: VerifiedCallback,
     ) {
         try {
+            console.log(4545);
             const accountService = new AccountService(
                 new AccountRepository(AccountModel),
             );
