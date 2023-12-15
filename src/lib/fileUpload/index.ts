@@ -98,6 +98,7 @@ class AwsS3Service {
             throw err;
         }
     }
+
     async deleteFiles(fileIds: string[]): Promise<string[]> {
         const deletedFileKeys: string[] = [];
         try {

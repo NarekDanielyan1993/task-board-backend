@@ -23,14 +23,8 @@ export type IEmailVerifyTokenQueryData = {
 // }
 
 export interface IUserResponse extends IUserModel {
-    id: string;
     _id: Types.ObjectId;
 }
-
-// export interface IUserResponseWithPassword extends IUserCreate {
-//     id: string;
-//     _id: Types.ObjectId;
-// }
 
 export interface IUserService {
     createUser(board: IUserCreate): Promise<IUserResponse>;

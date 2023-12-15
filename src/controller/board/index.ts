@@ -108,7 +108,6 @@ export default class BoardController {
         next: NextFunction,
     ) => {
         try {
-            console.log(7878);
             const { id } = req.body;
             await this.boardService.deleteBoardById(id);
             const deletedStages = await this.stageService.deleteStages({

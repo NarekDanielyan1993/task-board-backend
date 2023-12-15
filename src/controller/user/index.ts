@@ -8,6 +8,7 @@ import {
 } from 'constant/auth';
 import { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
+import { InternalServerError } from 'lib/error';
 import VerificationModel from 'model/verificationToken';
 import VerificationTokenRepository from 'repository/verificationToken';
 import EmailService from 'service/email';
@@ -59,10 +60,12 @@ export default class UserController {
                 password: hashedPassword,
             });
 
-            const newToken = await generateJwtToken({ id: savedUser.id });
+            const newToken = await generateJwtToken({
+                id: savedUser._id.toString(),
+            });
 
             if (!newToken) {
-                throw new Error('Internal server error');
+                throw new InternalServerError('Internal server error');
             }
 
             const verificationTokenService = new VerificationService(
