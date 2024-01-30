@@ -5,26 +5,35 @@
         "rootDir": "./",
         "moduleResolution": "NodeNext",
         "resolveJsonModule": true,
-        "outDir": "./build  ",
+        "outDir": "./build",
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "strict": true,
         "noImplicitAny": true,
         "skipLibCheck": true,
-        "sourceMap": true /* Skip type checking all .d.ts files. */,
+        "sourceMap": true,
         "noUnusedLocals": true,
-        // "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true,
-        "baseUrl": "src",
+        "baseUrl": ".",
         "paths": {
-            "types/*": ["types/*"],
-            "utils/*": ["utils/*"],
-            "controller/*": ["controller/*"],
-            "service/*": ["service/*"],
-            "model/*": ["model/*"],
-            "repository/*": ["repository/*"],
-            "constant/*": ["src/constant/*"],
-            "route/*": ["route/*"]
-        }
+            "types/*": ["./src/types/*"],
+            "utils/*": ["./src/utils/*"],
+            "middleware/*": ["./src/middleware/*"],
+            "controller/*": ["./src/controller/*"],
+            "service/*": ["./src/service/*"],
+            "model/*": ["./src/model/*"],
+            "repository/*": ["./src/repository/*"],
+            "constant/*": ["./src/constant/*"],
+            "lib/*": ["./src/lib/*"],
+            "route/*": ["./src/route/*"]
+        },
+        "plugins": [{ "transform": "typescript-transform-paths" }]
+    },
+    "exclude": [
+        "node_modules"
+    ],
+    "include": ["./src/**/*.ts"],
+    "ts-node": {
+        "require": ["tsconfig-paths/register"]
     }
 }

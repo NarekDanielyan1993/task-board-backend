@@ -1,12 +1,13 @@
 import compression from 'compression';
-import { corsOptions } from 'constant';
+import { corsOptions } from 'constant/middleware';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { Express, Router } from 'express';
 import helmet from 'helmet';
 import Database from 'lib/dbConnect';
-import 'lib/strategy';
-import passport from 'passport';
+import BoardModel from 'model/product';
+import BoardRepository from 'repository/product';
+import BoardService from 'service/product';
 
 class App {
     private expressApp: Express;
@@ -22,13 +23,10 @@ class App {
         this.expressApp.use(
             express.urlencoded({ limit: '25mb', extended: true }),
         );
-        // this.expressApp.use(morgan('dev'));
-        // this.expressApp.use(credentials);
         this.expressApp.use(express.json({ limit: '25mb' }));
         this.expressApp.use(helmet());
         this.expressApp.use(cookieParser());
         this.expressApp.use(cors(corsOptions));
-        this.expressApp.use(passport.initialize());
     }
 
     public initializeRoutes(routes: Router) {
@@ -49,6 +47,10 @@ class App {
             this.expressApp.listen(port, () => {
                 console.log(`Server is running on port ${port}`);
             });
+            const boardService = new BoardService(
+                new BoardRepository(BoardModel),
+            );
+            boardService.getAllProducts();
         } catch (error) {
             console.error('Failed to start the server:', error);
         }
