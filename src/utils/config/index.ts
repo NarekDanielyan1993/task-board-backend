@@ -10,7 +10,7 @@ class Config {
             return value;
         }
         console.log(`Environment variable "${key}" is not a string.`);
-        return undefined;
+        return '';
         // throw new Error(`Environment variable "${key}" is not a string.`);
     }
 
