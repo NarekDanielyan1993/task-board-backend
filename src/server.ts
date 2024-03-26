@@ -10,4 +10,4 @@ app.initializeMiddlewares();
 app.initializeRoutes(routes);
 app.addMiddleware(errorMiddleware);
 
-app.init(Number(Config.getEnv('SERVER_PORT')));
+app.init(Number(Config.getEnv('PORT')) || 6000);
