@@ -14,6 +14,9 @@ const taskSchema = new mongoose.Schema<ITaskModel>(
             type: String,
             trim: true,
         },
+        position: {
+            type: Number,
+        },
         taskNumber: {
             type: Number,
             unique: true,
@@ -28,6 +31,7 @@ const taskSchema = new mongoose.Schema<ITaskModel>(
     },
     {
         timestamps: true,
+        toJSON: { virtuals: true },
     },
 );
 

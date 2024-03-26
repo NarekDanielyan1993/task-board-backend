@@ -3,6 +3,7 @@ import { RootQuerySelector, Types } from 'mongoose';
 export interface IAttachmentModel {
     name: string;
     url: string;
+    publicId: string;
     isUploaded?: boolean;
     taskId: Types.ObjectId;
 }
@@ -10,6 +11,7 @@ export interface IAttachmentModel {
 export interface IAttachment {
     name: string;
     url: string;
+    publicId: string;
 }
 
 export interface IUploadFilesResponse {

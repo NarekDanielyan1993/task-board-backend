@@ -1,5 +1,12 @@
 import { InternalServerError } from 'lib/error';
-import { Model, QueryOptions, QuerySelector, Types } from 'mongoose';
+import {
+    FilterQuery,
+    Model,
+    QueryOptions,
+    QuerySelector,
+    Types,
+    UpdateQuery,
+} from 'mongoose';
 import {
     ITaskCreate,
     ITaskModel,
@@ -18,40 +25,41 @@ class TaskRepository implements ITaskRepository {
 
     async findAll(): Promise<ITaskResponse[]> {
         try {
-            const tasks = await this.model.aggregate([
-                {
-                    $lookup: {
-                        from: 'comments',
-                        localField: '_id',
-                        foreignField: 'taskId',
-                        as: 'comments',
-                        pipeline: [
-                            {
-                                $match: {
-                                    parentId: null,
+            const tasks = await this.model
+                .aggregate([
+                    {
+                        $lookup: {
+                            from: 'comments',
+                            localField: '_id',
+                            foreignField: 'taskId',
+                            as: 'comments',
+                            pipeline: [
+                                {
+                                    $match: {
+                                        parentId: null,
+                                    },
                                 },
-                            },
-                        ],
+                            ],
+                        },
                     },
-                },
-                {
-                    $lookup: {
-                        from: 'tasks',
-                        localField: '_id',
-                        foreignField: 'parentId',
-                        as: 'subTasks',
+                    {
+                        $lookup: {
+                            from: 'tasks',
+                            localField: '_id',
+                            foreignField: 'parentId',
+                            as: 'subTasks',
+                        },
                     },
-                },
-                {
-                    $lookup: {
-                        from: 'attachments',
-                        localField: '_id',
-                        foreignField: 'taskId',
-                        as: 'attachments',
+                    {
+                        $lookup: {
+                            from: 'attachments',
+                            localField: '_id',
+                            foreignField: 'taskId',
+                            as: 'attachments',
+                        },
                     },
-                },
-            ]);
-            console.log(tasks);
+                ])
+                .sort({ position: 1 });
             return tasks;
         } catch (error) {
             console.log(error);
@@ -65,11 +73,17 @@ class TaskRepository implements ITaskRepository {
                 .findOne()
                 .sort({ taskNumber: -1 })
                 .limit(1);
+            const stageTasksCount = await this.model
+                .find({
+                    stageId: taskData.stageId,
+                })
+                .count();
             const createdTask = await this.model.create({
                 ...taskData,
                 taskNumber: lastInsertedTask
                     ? (lastInsertedTask?.taskNumber as number) + 1
                     : 1,
+                position: stageTasksCount ? stageTasksCount + 1 : 1,
             });
             return createdTask;
         } catch (error) {
@@ -136,6 +150,19 @@ class TaskRepository implements ITaskRepository {
                 new: true,
                 ...options,
             });
+        } catch (error) {
+            console.log('task update failed', error);
+            throw new InternalServerError('Failed to update task');
+        }
+    }
+
+    async update(
+        filter: FilterQuery<ITaskModel>,
+        taskData: UpdateQuery<ITaskModel>,
+        options: QueryOptions,
+    ): Promise<ITaskModel | null> {
+        try {
+            return await this.model.findOneAndUpdate(filter, taskData, options);
         } catch (error) {
             console.log('task update failed', error);
             throw new InternalServerError('Failed to update task');

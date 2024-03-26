@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import AwsS3Service from 'lib/fileUpload';
+import CloudinaryService from 'lib/upload';
 import { Types } from 'mongoose';
 import { IAttachmentCreate, IAttachmentService } from 'types/attachment';
 import {
@@ -10,6 +10,7 @@ import {
     ITaskSearchQueryData,
     ITaskService,
     ITaskUpdateQueryData,
+    ITasksUpdateBody,
 } from 'types/task/index.js';
 import { isExist } from 'utils/helper';
 
@@ -76,15 +77,15 @@ class TaskController {
                 Array.isArray(taskData.attachments) &&
                 taskData.attachments.length > 0
             ) {
-                const awsS3Service = new AwsS3Service();
-                const uploadedAttachments =
-                    await awsS3Service.uploadMultipleFiles(
-                        taskData.attachments,
-                    );
-                const prepareAttachmentsToStore = uploadedAttachments.map(
-                    (attachment): IAttachmentCreate => ({
-                        url: attachment.key,
+                const cloudinaryService = new CloudinaryService();
+                const uploadedAttachments = await cloudinaryService.uploadFiles(
+                    taskData.attachments.map((att) => att.url),
+                );
+                const prepareAttachmentsToStore = taskData.attachments.map(
+                    (attachment, index): IAttachmentCreate => ({
                         name: attachment.name,
+                        url: uploadedAttachments[index].url,
+                        publicId: uploadedAttachments[index].publicId,
                         isUploaded: true,
                         taskId: createdTask._id as Types.ObjectId,
                     }),
@@ -133,19 +134,24 @@ class TaskController {
     ) => {
         const taskId = req.query.taskId as string;
         const taskData: ITaskUpdateQueryData = req.body;
+        console.log(taskData);
         try {
             if (
-                isExist(taskData.attachments) &&
+                isExist(taskData.removedAttachments) &&
                 Array.isArray(taskData.removedAttachments) &&
                 taskData.removedAttachments.length > 0
             ) {
-                const awsS3Service = new AwsS3Service();
-                await awsS3Service.deleteFiles(
-                    taskData.removedAttachments.map((att) => att.url),
+                const cloudinaryService = new CloudinaryService();
+
+                await cloudinaryService.deleteFiles(
+                    taskData.removedAttachments.map((att) => att.publicId),
                 );
+
                 await this.attachmentService.deleteMany({
-                    url: {
-                        $in: taskData.removedAttachments.map((att) => att.url),
+                    publicId: {
+                        $in: taskData.removedAttachments.map(
+                            (att) => att.publicId,
+                        ),
                     },
                 });
             }
@@ -153,16 +159,19 @@ class TaskController {
                 Array.isArray(taskData.attachments) &&
                 taskData.attachments.length > 0
             ) {
-                const awsS3Service = new AwsS3Service();
-                const newAttachments = await awsS3Service.uploadMultipleFiles(
-                    taskData.attachments.map((att) => att),
+                const cloudinaryService = new CloudinaryService();
+                const newAttachments = await cloudinaryService.uploadFiles(
+                    taskData.attachments.map((att) => att.url),
                 );
-                const prepareAttachmentsToStore = newAttachments.map((att) => ({
-                    name: att.name,
-                    url: att.key,
-                    isUploaded: true,
-                    taskId: new Types.ObjectId(taskId),
-                }));
+                const prepareAttachmentsToStore = taskData.attachments.map(
+                    (att, index) => ({
+                        name: att.name,
+                        url: newAttachments[index].url,
+                        publicId: newAttachments[index].publicId,
+                        isUploaded: true,
+                        taskId: new Types.ObjectId(taskId),
+                    }),
+                );
                 await this.attachmentService.create(prepareAttachmentsToStore);
             }
             const updatedTask: ITaskResponse | null =
@@ -192,6 +201,32 @@ class TaskController {
         }
     };
 
+    public updateTasks = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ) => {
+        const taskData: ITasksUpdateBody[] = req.body;
+
+        try {
+            const updatedTasksPromise = taskData.map(
+                async (task) =>
+                    await this.taskService.updateTasks(
+                        { _id: task.id },
+                        {
+                            ...task.data,
+                        },
+                    ),
+            );
+
+            const updatedTasks = await Promise.all(updatedTasksPromise);
+
+            res.status(200).json(updatedTasks);
+        } catch (error) {
+            next(error);
+        }
+    };
+
     public deleteTask = async (
         req: Request,
         res: Response,
@@ -210,10 +245,10 @@ class TaskController {
                 throw new Error('Attachments not found.');
             }
             const prepareFilesToDelete = deletedAttachments?.map(
-                (att) => att.url,
+                (att) => att.publicId,
             );
-            const awsS3Service = new AwsS3Service();
-            await awsS3Service.deleteFiles(prepareFilesToDelete);
+            const cloudinaryService = new CloudinaryService();
+            await cloudinaryService.deleteFiles(prepareFilesToDelete);
             res.status(204).json({ msg: 'success.' });
         } catch (error) {
             next(error);

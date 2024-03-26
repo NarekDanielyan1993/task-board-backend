@@ -17,12 +17,13 @@ class MongoDb implements IDatabase {
     }
 
     public async connect(): Promise<void> {
+        // mongoose.deleteModel('Attachment');
+        // delete mongoose.models.Task;
         if (!this.connection) {
             try {
                 this.connection = await mongoose.connect(
                     Config.getEnv('DATABASE_URL'),
                 );
-                // Config.transformMongooseResultingData(mongoose);
                 console.log('Connected to the database');
             } catch (error) {
                 console.error(`Database connection error: ${error}`);

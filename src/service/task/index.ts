@@ -1,4 +1,10 @@
-import { QueryOptions, QuerySelector, Types } from 'mongoose';
+import {
+    FilterQuery,
+    QueryOptions,
+    QuerySelector,
+    Types,
+    UpdateQuery,
+} from 'mongoose';
 import {
     ITaskCreate,
     ITaskModel,
@@ -34,6 +40,14 @@ export class TaskService implements ITaskService {
         options: QueryOptions,
     ): Promise<ITaskResponse | null> {
         return this.taskRepository.updateById(taskId, taskData, options);
+    }
+
+    async updateTasks(
+        filter: FilterQuery<ITaskModel>,
+        taskData: UpdateQuery<ITaskModel>,
+        options: QueryOptions,
+    ): Promise<ITaskModel | null> {
+        return await this.taskRepository.update(filter, taskData, options);
     }
 
     async deleteTask(taskId: string): Promise<ITaskResponse | null> {

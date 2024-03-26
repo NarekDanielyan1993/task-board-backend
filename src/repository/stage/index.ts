@@ -1,5 +1,11 @@
 import { InternalServerError } from 'lib/error';
-import { Model, QueryOptions, RootQuerySelector, Types } from 'mongoose';
+import {
+    Model,
+    QueryOptions,
+    RootQuerySelector,
+    Types,
+    UpdateQuery,
+} from 'mongoose';
 import { UpdateOperation } from 'types/database';
 import {
     IStageCreate,
@@ -7,7 +13,6 @@ import {
     IStageModel,
     IStageRepository,
     IStageResponse,
-    IStageUpdate,
 } from 'types/stage';
 
 class StageRepository implements IStageRepository {
@@ -44,22 +49,18 @@ class StageRepository implements IStageRepository {
     }
 
     async updateById(
-        id: Types.ObjectId,
-        data: IStageUpdate,
+        id: string,
+        data: UpdateQuery<IStageModel>,
         options: QueryOptions,
-    ): Promise<any> {
+    ): Promise<IStageResponse | null> {
         try {
-            const updatedStages = await this.model.findByIdAndUpdate(
-                id.toHexString(),
-                data,
-                {
-                    new: true,
-                    ...options,
-                },
-            );
+            const updatedStages = await this.model.findByIdAndUpdate(id, data, {
+                new: true,
+                ...options,
+            });
             return updatedStages;
         } catch (error) {
-            console.log('updateing stage error', error);
+            console.log('updating stage error', error);
             throw new InternalServerError(
                 'An error occurred while creating the state.',
             );

@@ -1,4 +1,4 @@
-import { QueryOptions, RootQuerySelector, Types } from 'mongoose';
+import { QueryOptions, RootQuerySelector, Types, UpdateQuery } from 'mongoose';
 import { UpdateOperation } from '..';
 
 export interface IStageModel extends Document {
@@ -8,9 +8,24 @@ export interface IStageModel extends Document {
     color: string;
 }
 
+export interface IStageUpdatePositions {
+    id: string;
+    position: number;
+}
+
+export interface IStageCreateBody {
+    name: string;
+    color: string;
+    boardId: string;
+    listPosition: number;
+    updatedStagePositions: IStageUpdatePositions[];
+}
+
 export interface IStageCreate {
     name: string;
+    color: string;
     boardId: string;
+    listPosition: number;
 }
 
 export interface IStageUpdate {
@@ -37,10 +52,10 @@ export interface IStageService {
     deleteStages(data: RootQuerySelector<IStageModel>): Promise<any>;
     deleteStage(data: RootQuerySelector<IStageModel>): Promise<any>;
     updateById(
-        id: Types.ObjectId,
-        data: IStageUpdate,
+        id: string,
+        data: UpdateQuery<IStageModel>,
         options?: QueryOptions,
-    ): Promise<IStageResponse>;
+    ): Promise<IStageResponse | null>;
     updateMultiple(data: UpdateOperation[]): Promise<any[]>;
 }
 
@@ -53,9 +68,9 @@ export interface IStageRepository {
     deleteMany(data: RootQuerySelector<IStageModel>): Promise<any>;
     deleteOne(data: RootQuerySelector<IStageModel>): Promise<any>;
     updateById(
-        id: Types.ObjectId,
-        data: IStageUpdate,
+        id: string,
+        data: UpdateQuery<IStageModel>,
         options?: QueryOptions,
-    ): Promise<IStageResponse>;
+    ): Promise<IStageResponse | null>;
     updateMultiple(data: UpdateOperation[]): Promise<any[]>;
 }

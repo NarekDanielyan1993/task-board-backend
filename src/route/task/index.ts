@@ -21,6 +21,7 @@ taskRoutes.get('/tasks', taskController.getTasks);
 taskRoutes.post('/task', isAuth, taskController.createTask);
 taskRoutes.post('/task/subtask', isAuth, taskController.createSubTask);
 taskRoutes.put('/task', isAuth, taskController.updateTask);
+taskRoutes.put('/tasks', isAuth, taskController.updateTasks);
 taskRoutes.delete('/task', isAuth, taskController.deleteTask);
 
 export default taskRoutes;

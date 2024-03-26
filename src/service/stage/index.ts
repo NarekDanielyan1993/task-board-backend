@@ -1,4 +1,9 @@
-import mongoose, { QueryOptions, RootQuerySelector, Types } from 'mongoose';
+import mongoose, {
+    QueryOptions,
+    RootQuerySelector,
+    Types,
+    UpdateQuery,
+} from 'mongoose';
 import { UpdateOperation } from 'types/database';
 import {
     IStageCreate,
@@ -7,7 +12,6 @@ import {
     IStageRepository,
     IStageResponse,
     IStageService,
-    IStageUpdate,
 } from 'types/stage';
 
 class StageService implements IStageService {
@@ -40,10 +44,10 @@ class StageService implements IStageService {
     }
 
     async updateById(
-        id: Types.ObjectId,
-        data: IStageUpdate,
+        id: string,
+        data: UpdateQuery<IStageModel>,
         options?: QueryOptions,
-    ): Promise<IStageResponse> {
+    ): Promise<IStageResponse | null> {
         return await this.repository.updateById(id, data, options);
     }
 

@@ -1,4 +1,10 @@
-import { QueryOptions, RootQuerySelector, Types } from 'mongoose';
+import {
+    FilterQuery,
+    QueryOptions,
+    RootQuerySelector,
+    Types,
+    UpdateQuery,
+} from 'mongoose';
 import { IAttachment } from '..';
 
 export interface ITaskModel {
@@ -10,6 +16,7 @@ export interface ITaskModel {
     stageId: Types.ObjectId;
     parentId?: Types.ObjectId;
     comments?: Types.ObjectId[];
+    position: number;
 }
 
 export interface ITaskCreateQueryData {
@@ -29,6 +36,10 @@ export interface ISubTaskCreateQueryData {
 
 export interface ITaskUpdateQueryData extends Partial<ITaskCreateQueryData> {
     removedAttachments: IAttachment[];
+}
+export interface ITasksUpdateBody {
+    id: string;
+    data: { position: number; stageId: string };
 }
 
 export interface ITaskCreate {
@@ -67,6 +78,11 @@ export interface ITaskRepository {
         taskData: ITaskUpdate,
         options?: QueryOptions,
     ): Promise<ITaskResponse | null>;
+    update(
+        filter: FilterQuery<ITaskModel>,
+        taskData: UpdateQuery<ITaskModel>,
+        options: QueryOptions,
+    ): Promise<ITaskModel | null>;
     delete(taskId: string): Promise<any>;
     deleteMany(data: RootQuerySelector<ITaskModel>): Promise<any>;
 }
@@ -80,6 +96,11 @@ export interface ITaskService {
         taskData: ITaskUpdate,
         options?: QueryOptions,
     ): Promise<ITaskResponse | null>;
+    updateTasks(
+        filter: FilterQuery<ITaskModel>,
+        taskData: UpdateQuery<ITaskModel>,
+        options?: QueryOptions,
+    ): Promise<ITaskModel | null>;
     deleteTask(taskId: string): Promise<ITaskResponse | null>;
     deleteTasks(data: RootQuerySelector<ITaskModel>): Promise<any>;
 }
