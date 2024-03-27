@@ -200,13 +200,13 @@ export default class UserController {
 
             setCookie(req, res, 'refreshToken', refreshToken, {
                 secure: false,
-                sameSite: true,
+                sameSite: false,
                 maxAge: EXPIRES_IN_1_DAY,
             });
 
             setCookie(req, res, 'isLoggedIn', 'true', {
                 secure: false,
-                sameSite: true,
+                sameSite: false,
                 httpOnly: false,
                 maxAge: EXPIRES_IN_1_DAY,
             });
@@ -242,7 +242,7 @@ export default class UserController {
 
             setCookie(req, res, 'refreshToken', refreshToken, {
                 secure: false,
-                sameSite: true,
+                sameSite: false,
                 maxAge: EXPIRES_IN_1_DAY,
             });
 
@@ -306,8 +306,8 @@ export default class UserController {
         } catch (error) {
             res.clearCookie('isLoggedIn');
             res.clearCookie('refreshToken', {
-                httpOnly: true,
-                sameSite: true,
+                httpOnly: false,
+                sameSite: false,
                 secure: false,
             });
             next(error);
@@ -426,8 +426,8 @@ export default class UserController {
         try {
             res.clearCookie('isLoggedIn');
             res.clearCookie('refreshToken', {
-                httpOnly: true,
-                sameSite: true,
+                httpOnly: false,
+                sameSite: false,
                 secure: false,
             });
             const decodedToken = verifyJwtToken(
