@@ -200,7 +200,7 @@ export default class UserController {
 
             setCookie(req, res, 'refreshToken', refreshToken, {
                 secure: false,
-                sameSite: false,
+                sameSite: 'Lax',
                 maxAge: EXPIRES_IN_1_DAY,
             });
 
