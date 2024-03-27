@@ -56,7 +56,7 @@ export function setCookie(
     options?: Partial<Cookie>,
 ) {
     const defaultCookieOptions: Partial<Cookie> = {
-        httpOnly: true,
+        httpOnly: false,
         secure: false,
         maxAge: EXPIRES_IN_1_DAY,
         sameSite: false,
