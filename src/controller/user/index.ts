@@ -199,14 +199,15 @@ export default class UserController {
             });
 
             setCookie(req, res, 'refreshToken', refreshToken, {
-                secure: false,
-                sameSite: 'Lax',
+                secure: true,
+                sameSite: 'None',
+                httpOnly: true,
                 maxAge: EXPIRES_IN_1_DAY,
             });
 
             setCookie(req, res, 'isLoggedIn', 'true', {
-                secure: false,
-                sameSite: false,
+                sameSite: 'None',
+                secure: true,
                 httpOnly: false,
                 maxAge: EXPIRES_IN_1_DAY,
             });
@@ -300,6 +301,8 @@ export default class UserController {
 
             setCookie(req, res, 'isLoggedIn', 'true', {
                 httpOnly: false,
+                sameSite: 'None',
+                secure: true,
             });
 
             res.status(200).json({ accessToken });
