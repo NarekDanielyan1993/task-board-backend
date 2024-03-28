@@ -5,6 +5,7 @@ export const allowedOrigins = [
     'http://localhost:5000',
     'http://localhost:3000',
     'https://tasktrecker.netlify.app',
+    'https://task-board-frontend.onrender.com',
 ];
 
 export const corsOptions: CorsOptions = {
