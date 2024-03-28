@@ -199,15 +199,15 @@ export default class UserController {
             });
 
             setCookie(req, res, 'refreshToken', refreshToken, {
-                secure: false,
-                sameSite: 'Lax',
+                secure: true,
+                sameSite: 'None',
                 httpOnly: true,
                 maxAge: EXPIRES_IN_1_DAY,
             });
 
             setCookie(req, res, 'isLoggedIn', 'true', {
-                sameSite: 'Lax',
-                secure: false,
+                sameSite: 'None',
+                secure: true,
                 httpOnly: false,
                 maxAge: EXPIRES_IN_1_DAY,
             });
@@ -242,14 +242,14 @@ export default class UserController {
             });
 
             setCookie(req, res, 'refreshToken', refreshToken, {
-                secure: false,
-                sameSite: false,
+                secure: true,
+                sameSite: 'None',
                 maxAge: EXPIRES_IN_1_DAY,
             });
 
             setCookie(req, res, 'isLoggedIn', 'true', {
-                secure: false,
-                sameSite: false,
+                secure: true,
+                sameSite: 'None',
                 httpOnly: false,
                 maxAge: EXPIRES_IN_1_DAY,
             });
@@ -301,8 +301,8 @@ export default class UserController {
 
             setCookie(req, res, 'isLoggedIn', 'true', {
                 httpOnly: false,
-                sameSite: 'Lax',
-                secure: false,
+                sameSite: 'None',
+                secure: true,
             });
 
             res.status(200).json({ accessToken });
@@ -310,8 +310,8 @@ export default class UserController {
             res.clearCookie('isLoggedIn');
             res.clearCookie('refreshToken', {
                 httpOnly: false,
-                sameSite: false,
-                secure: false,
+                sameSite: 'None',
+                secure: true,
             });
             next(error);
         }
