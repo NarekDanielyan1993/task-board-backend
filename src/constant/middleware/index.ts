@@ -8,16 +8,20 @@ export const allowedOrigins = [
 ];
 
 export const corsOptions: CorsOptions = {
-    origin: allowedOrigins,
+    // origin: allowedOrigins,
     credentials: true,
     optionsSuccessStatus: 200,
     preflightContinue: true,
-    // methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    // allowedHeaders: [
-    //     'Content-Type',
-    //     'Origin',
-    //     'X-Requested-With',
-    //     'Accept',
-    //     'Authorization',
-    // ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: [
+        'X-CSRF-Token',
+        'X-Requested-With',
+        'Accept',
+        'Accept-Version',
+        'Content-Length',
+        'Content-MD5',
+        'Content-Type',
+        'Date',
+        'X-Api-Version',
+    ],
 };
