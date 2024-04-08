@@ -310,7 +310,7 @@ export default class UserController {
             res.clearCookie('isLoggedIn');
             res.clearCookie('refreshToken', {
                 httpOnly: false,
-                sameSite: false,
+                sameSite: 'none',
                 secure: true,
             });
             next(error);
