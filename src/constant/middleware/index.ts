@@ -15,6 +15,7 @@ export const corsOptions: CorsOptions = {
     optionsSuccessStatus: 200,
     preflightContinue: true,
     allowedHeaders: [
+        'Origin',
         'X-CSRF-Token',
         'X-Requested-With',
         'Accept',
