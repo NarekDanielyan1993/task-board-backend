@@ -253,6 +253,7 @@ export default class UserController {
                 httpOnly: false,
                 maxAge: EXPIRES_IN_1_DAY,
             });
+            console.log(Config.getEnv('CLIENT_BASE_URL'));
             res.redirect(`${Config.getEnv('CLIENT_BASE_URL')}/boards`);
         } catch (error) {
             res.redirect(`${Config.getEnv('CLIENT_BASE_URL')}/auth/login`);
