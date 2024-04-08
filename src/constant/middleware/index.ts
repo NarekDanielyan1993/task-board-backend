@@ -9,11 +9,10 @@ export const allowedOrigins = [
 ];
 
 export const corsOptions: CorsOptions = {
-    origin: '*',
+    origin: allowedOrigins,
     methods: '*',
     credentials: true,
     optionsSuccessStatus: 200,
-    preflightContinue: true,
     allowedHeaders: [
         'Origin',
         'X-CSRF-Token',
