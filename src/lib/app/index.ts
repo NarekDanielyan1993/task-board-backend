@@ -1,7 +1,5 @@
 import compression from 'compression';
-import { corsOptions } from 'constant/middleware';
 import cookieParser from 'cookie-parser';
-import cors from 'cors';
 import express, { Express, Router } from 'express';
 import helmet from 'helmet';
 import Database from 'lib/dbConnect';
@@ -27,7 +25,7 @@ class App {
         this.expressApp.use(express.json({ limit: '25mb' }));
         this.expressApp.use(helmet());
         this.expressApp.use(cookieParser());
-        this.expressApp.use(cors(corsOptions));
+        // this.expressApp.use(cors(corsOptions));
         this.expressApp.use(passport.initialize());
     }
 
