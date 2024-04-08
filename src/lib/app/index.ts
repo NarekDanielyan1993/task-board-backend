@@ -29,6 +29,7 @@ class App {
         this.expressApp.use(cookieParser());
         this.expressApp.use(cors(corsOptions));
         this.expressApp.use(passport.initialize());
+        this.expressApp.set('trust proxy', true);
     }
 
     public initializeRoutes(routes: Router) {
