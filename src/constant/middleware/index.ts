@@ -4,8 +4,9 @@ export const allowedOrigins = [
     'http://localhost:9000',
     'http://localhost:5000',
     'http://localhost:3000',
-    'https://task-board-frontend-one.vercel.app',
+    'http://localhost:4000',
     'https://task-board-frontend.onrender.com',
+    'https://frontend.tasktrecker.site',
 ];
 
 export const corsOptions: CorsOptions = {

@@ -199,18 +199,10 @@ export default class UserController {
             });
 
             setCookie(req, res, 'refreshToken', refreshToken, {
-                secure: true,
-                sameSite: 'none',
                 httpOnly: true,
-                maxAge: EXPIRES_IN_1_DAY,
             });
 
-            setCookie(req, res, 'isLoggedIn', 'true', {
-                sameSite: 'none',
-                secure: true,
-                httpOnly: false,
-                maxAge: EXPIRES_IN_1_DAY,
-            });
+            setCookie(req, res, 'isLoggedIn', 'true');
 
             res.status(200).json({ accessToken });
         } catch (error) {
@@ -241,18 +233,10 @@ export default class UserController {
                 identifier: user._id.toString(),
             });
 
-            setCookie(req, res, 'refreshToken', refreshToken, {
-                secure: true,
-                sameSite: 'none',
-                maxAge: EXPIRES_IN_1_DAY,
-            });
+            setCookie(req, res, 'refreshToken', refreshToken);
 
-            setCookie(req, res, 'isLoggedIn', 'true', {
-                secure: true,
-                sameSite: 'none',
-                httpOnly: false,
-                maxAge: EXPIRES_IN_1_DAY,
-            });
+            setCookie(req, res, 'isLoggedIn', 'true');
+
             res.redirect(`${Config.getEnv('CLIENT_BASE_URL')}/boards`);
         } catch (error) {
             res.redirect(`${Config.getEnv('CLIENT_BASE_URL')}/auth/login`);
@@ -300,19 +284,13 @@ export default class UserController {
             });
 
             setCookie(req, res, 'isLoggedIn', 'true', {
-                httpOnly: false,
-                sameSite: 'none',
-                secure: true,
+                maxAge: EXPIRES_IN_1_DAY,
             });
 
             res.status(200).json({ accessToken });
         } catch (error) {
             res.clearCookie('isLoggedIn');
-            res.clearCookie('refreshToken', {
-                httpOnly: false,
-                sameSite: 'none',
-                secure: true,
-            });
+            res.clearCookie('refreshToken');
             next(error);
         }
     };
@@ -430,8 +408,6 @@ export default class UserController {
             res.clearCookie('isLoggedIn');
             res.clearCookie('refreshToken', {
                 httpOnly: false,
-                sameSite: false,
-                secure: false,
             });
             const decodedToken = verifyJwtToken(
                 req.cookies.refreshToken,

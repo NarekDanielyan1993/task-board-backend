@@ -53,14 +53,14 @@ export function setCookie(
     res: Response,
     name: string,
     value: string,
-    options: CookieOptions,
+    options?: CookieOptions,
 ) {
     const defaultCookieOptions: CookieOptions = {
         httpOnly: false,
-        secure: false,
+        secure: Config.getEnv('NODE_ENV') === 'production',
         maxAge: EXPIRES_IN_1_DAY,
-        sameSite: 'none',
-        domain: '.onrender.com',
+        sameSite:
+            Config.getEnv('NODE_ENV') === 'production' ? 'none' : 'strict',
     };
 
     const cookies = new Cookies(req, res);
