@@ -407,12 +407,12 @@ export default class UserController {
         try {
             // clearCookie(req, res);
             res.clearCookie('isLoggedIn', {
-                domain: 'tacktrecker.site',
+                domain: '.tacktrecker.site',
                 secure: true,
             });
             res.clearCookie('refreshToken', {
                 httpOnly: true,
-                domain: 'tacktrecker.site',
+                domain: '.tacktrecker.site',
                 secure: true,
             });
             const decodedToken = verifyJwtToken(
