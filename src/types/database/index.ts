@@ -3,6 +3,8 @@ import { Mongoose, Types } from 'mongoose';
 export type EnvVariableTypes =
     | 'DATABASE_URL'
     | 'PORT'
+    | 'PROD_DOMAIN'
+    | 'DEV_DOMAIN'
     | 'S3_ACCESS_KEY'
     | 'S3_BUCKET'
     | 'S3_BUCKET_IMAGES'

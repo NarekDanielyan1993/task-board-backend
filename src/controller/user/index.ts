@@ -405,14 +405,19 @@ export default class UserController {
 
     public logout = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            // clearCookie(req, res);
             res.clearCookie('isLoggedIn', {
-                domain: '.tasktrecker.site',
+                domain:
+                    Config.getEnv('NODE_ENV') === 'production'
+                        ? Config.getEnv('PROD_DOMAIN')
+                        : Config.getEnv('DEV_DOMAIN'),
                 secure: true,
             });
             res.clearCookie('refreshToken', {
                 httpOnly: true,
-                domain: '.tasktrecker.site',
+                domain:
+                    Config.getEnv('NODE_ENV') === 'production'
+                        ? Config.getEnv('PROD_DOMAIN')
+                        : Config.getEnv('DEV_DOMAIN'),
                 secure: true,
             });
             const decodedToken = verifyJwtToken(
