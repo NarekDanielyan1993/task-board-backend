@@ -7,7 +7,7 @@
         "clean": "rm -rf build",
         "build": "tspc",
         "dev": "cross-env NODE_ENV=development nodemon src/server.ts",
-        "start": "node build/src/server.js"
+        "start": "cross-env NODE_ENV=production node build/src/server.js"
     },
     "author": "",
     "license": "ISC",
