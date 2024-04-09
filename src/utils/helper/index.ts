@@ -60,6 +60,10 @@ export function setCookie(
         secure: Config.getEnv('NODE_ENV') === 'production',
         maxAge: EXPIRES_IN_1_DAY,
         sameSite: Config.getEnv('NODE_ENV') === 'production' ? 'none' : 'lax',
+        domain:
+            Config.getEnv('NODE_ENV') === 'production'
+                ? 'tasktrecker.com'
+                : 'localhost',
     };
 
     const cookies = new Cookies(req, res);
