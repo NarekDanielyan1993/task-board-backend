@@ -59,8 +59,8 @@ export function setCookie(
         httpOnly: false,
         secure: false,
         maxAge: EXPIRES_IN_1_DAY,
-        sameSite: false,
-        domain: 'onrender.com',
+        sameSite: 'none',
+        domain: '.onrender.com',
     };
 
     const cookies = new Cookies(req, res);
