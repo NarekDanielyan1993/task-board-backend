@@ -62,7 +62,7 @@ export function setCookie(
         sameSite: Config.getEnv('NODE_ENV') === 'production' ? 'none' : 'lax',
         domain:
             Config.getEnv('NODE_ENV') === 'production'
-                ? '.tasktrecker.com'
+                ? 'tasktrecker.site'
                 : 'localhost',
     };
 
