@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { EXPIRES_IN_1_DAY, JWT_EXPIRES_IN_10_MINUTES } from 'constant/auth';
 import Cookies from 'cookies';
-import { Request, Response } from 'express';
+import { CookieOptions, Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import Config from 'utils/config';
 
@@ -53,9 +53,9 @@ export function setCookie(
     res: Response,
     name: string,
     value: string,
-    options: any,
+    options: CookieOptions,
 ) {
-    const defaultCookieOptions = {
+    const defaultCookieOptions: CookieOptions = {
         httpOnly: false,
         secure: false,
         maxAge: EXPIRES_IN_1_DAY,
