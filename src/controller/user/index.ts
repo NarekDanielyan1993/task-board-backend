@@ -23,7 +23,6 @@ import {
 import { IVerificationTokenResponse } from 'types/verificationToken';
 import Config from 'utils/config';
 import {
-    clearCookie,
     generateJwtToken,
     isExist,
     setCookie,
@@ -406,11 +405,16 @@ export default class UserController {
 
     public logout = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            clearCookie(req, res);
-            // res.clearCookie('isLoggedIn', {});
-            // res.clearCookie('refreshToken', {
-            //     httpOnly: false,
-            // });
+            // clearCookie(req, res);
+            res.clearCookie('isLoggedIn', {
+                domain: 'tacktrecker.site',
+                secure: true,
+            });
+            res.clearCookie('refreshToken', {
+                httpOnly: true,
+                domain: 'tacktrecker.site',
+                secure: true,
+            });
             const decodedToken = verifyJwtToken(
                 req.cookies.refreshToken,
                 Config.getEnv('REFRESH_TOKEN_KEY'),

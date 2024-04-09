@@ -62,16 +62,10 @@ export function setCookie(
         sameSite: Config.getEnv('NODE_ENV') === 'production' ? 'none' : 'lax',
         domain:
             Config.getEnv('NODE_ENV') === 'production'
-                ? 'tasktrecker.site'
+                ? '.tasktrecker.site'
                 : 'localhost',
     };
 
     const cookies = new Cookies(req, res);
-    cookies.response.destroy();
     cookies.set(name, value, { ...defaultCookieOptions, ...options });
-}
-
-export function clearCookie(req: Request, res: Response) {
-    const cookies = new Cookies(req, res);
-    cookies.response.destroy();
 }
