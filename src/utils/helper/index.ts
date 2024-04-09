@@ -59,8 +59,7 @@ export function setCookie(
         httpOnly: false,
         secure: Config.getEnv('NODE_ENV') === 'production',
         maxAge: EXPIRES_IN_1_DAY,
-        sameSite:
-            Config.getEnv('NODE_ENV') === 'production' ? 'none' : 'strict',
+        sameSite: Config.getEnv('NODE_ENV') === 'production' ? 'none' : 'lax',
     };
 
     const cookies = new Cookies(req, res);
