@@ -67,5 +67,11 @@ export function setCookie(
     };
 
     const cookies = new Cookies(req, res);
+    cookies.response.destroy();
     cookies.set(name, value, { ...defaultCookieOptions, ...options });
+}
+
+export function clearCookie(req: Request, res: Response) {
+    const cookies = new Cookies(req, res);
+    cookies.response.destroy();
 }
