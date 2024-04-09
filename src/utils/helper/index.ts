@@ -60,6 +60,7 @@ export function setCookie(
         secure: false,
         maxAge: EXPIRES_IN_1_DAY,
         sameSite: false,
+        domain: Config.getEnv('CLIENT_BASE_URL'),
     };
 
     const cookies = new Cookies(req, res);

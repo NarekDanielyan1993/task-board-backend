@@ -202,14 +202,14 @@ export default class UserController {
                 secure: true,
                 sameSite: 'none',
                 httpOnly: true,
-                expires: new Date(Date.now() + 60 * 60 * 1000),
+                maxAge: EXPIRES_IN_1_DAY,
             });
 
             setCookie(req, res, 'isLoggedIn', 'true', {
                 sameSite: 'none',
                 secure: true,
                 httpOnly: false,
-                expires: new Date(Date.now() + 60 * 60 * 1000),
+                maxAge: EXPIRES_IN_1_DAY,
             });
 
             res.status(200).json({ accessToken });
@@ -253,7 +253,6 @@ export default class UserController {
                 httpOnly: false,
                 maxAge: EXPIRES_IN_1_DAY,
             });
-            console.log(Config.getEnv('CLIENT_BASE_URL'));
             res.redirect(`${Config.getEnv('CLIENT_BASE_URL')}/boards`);
         } catch (error) {
             res.redirect(`${Config.getEnv('CLIENT_BASE_URL')}/auth/login`);
@@ -304,7 +303,6 @@ export default class UserController {
                 httpOnly: false,
                 sameSite: 'none',
                 secure: true,
-                expires: new Date(Date.now() + 60 * 60 * 1000),
             });
 
             res.status(200).json({ accessToken });
