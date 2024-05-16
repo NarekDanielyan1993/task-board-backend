@@ -59,17 +59,21 @@ export default class StageController {
             const stages = await this.stageService.getStagesByBoard(
                 deletedStage.boardId,
             );
-            if (deletedStage.listPosition < stages.length) {
+            if (deletedStage.listPosition <= stages.length) {
                 await Promise.all(
                     stages
                         .filter(
                             (stage) =>
                                 stage.listPosition > deletedStage.listPosition,
                         )
-                        .map((st) =>
-                            this.stageService.updateById(st._id.toString(), {
-                                listPosition: st.listPosition - 1,
-                            }),
+                        .map(
+                            async (st) =>
+                                await this.stageService.updateById(
+                                    st._id.toString(),
+                                    {
+                                        listPosition: st.listPosition - 1,
+                                    },
+                                ),
                         ),
                 );
             }
