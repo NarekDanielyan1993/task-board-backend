@@ -1,4 +1,3 @@
-// routes/boardRoutes.ts
 import { GOOGLE_FAILURE_REDIRECT_ROUTE, USER_API } from 'constant/api';
 import UserController from 'controller/user';
 import express, { Router } from 'express';

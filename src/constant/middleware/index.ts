@@ -11,7 +11,7 @@ export const allowedOrigins = [
 
 export const corsOptions: CorsOptions = {
     origin: allowedOrigins,
-    methods: ['POST', 'PUT', 'GET', 'OPTIONS'],
+    methods: ['POST', 'PUT', 'GET', 'DELETE', 'OPTIONS'],
     credentials: true,
     optionsSuccessStatus: 200,
     preflightContinue: true,

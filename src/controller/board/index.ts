@@ -113,13 +113,16 @@ export default class BoardController {
             const deletedStages = await this.stageService.deleteStages({
                 boardId: id,
             });
+            console.log(deletedStages);
             const deletedStageIds = deletedStages.map(
                 (stage: IStageResponse) => stage._id,
             );
-            await this.taskService.deleteTasks({
-                stageId: { $in: deletedStageIds },
-            });
-            await res.status(204).json({ msg: 'success' });
+            if (deletedStageIds.length > 0) {
+                await this.taskService.deleteTasks({
+                    stageId: { $in: deletedStageIds },
+                });
+            }
+            res.status(204).json({ msg: 'success' });
         } catch (error) {
             next(error);
         }
